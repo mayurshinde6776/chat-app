@@ -1,0 +1,65 @@
+.register {
+  background-color: #87f3ae;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+}
+
+.home {
+  background-color: #87f3ae;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.home-container {
+  border: 1px solid white;
+  border-radius: 10px;
+  width: 65%;
+  height: 80%;
+  display: flex;
+  overflow: hidden;
+}
+
+.sidebar {
+  flex: 1;
+  background-color: #3e3c61;
+}
+
+.chat {
+  flex: 2;
+
+  .chatInfo {
+    height: 50px;
+    background-color: #5d5b8d;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    color: lightgray;
+  }
+
+  .chatIcons {
+    display: flex;
+    gap: 10px;
+
+    img {
+      height: 24px;
+      cursor: pointer;
+    }
+  }
+
+  .messages {
+    background-color: #ddddf7;
+    padding: 10px;
+    height: calc(100% - 160px);
+  }
+
+  .input {
+    height: 50px;
+    background-color: white;
+    padding: 10px;
+  }
+}
