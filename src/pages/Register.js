@@ -7,6 +7,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db, storage } from '../firebase';
 import {  ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore"; 
+import { useNavigate, Link } from 'react-router-dom';
 
 function Register() {
   const [displayName, setDisplayName] = useState('');
@@ -15,6 +16,7 @@ function Register() {
   const [file, setFile] = useState(null);
 const  [err ,setErr]= useState(false);
 
+const navigate = useNavigate()
 
 
 const handleSubmit = async (e) => {
@@ -53,6 +55,9 @@ const handleSubmit = async (e) => {
           email,
           photoURL: downloadURL,
         });
+
+        await setDoc(doc(db, "userChats",userCredential.user.uid),{});
+        navigate('/')
       }
     );
   } catch (error) {
@@ -60,8 +65,6 @@ const handleSubmit = async (e) => {
     console.error(error);
   }
 };
-
-
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
@@ -130,7 +133,7 @@ const handleSubmit = async (e) => {
                   </Button>
                   {err && <span>Something went wrong</span>}
                 </Form>
-                <p className='text-center'>Do you have an account? Login</p>
+                <p className='text-center'>Do you have an account? <Link to='/register' >Login</Link></p>
               </Card.Body>
             </Card>
           </Col>

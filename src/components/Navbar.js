@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import '../css/Navbar.css';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
+import { AuthContext } from '../context/AuthContext';
 
 export const Navbar = () => {
+  const {currentUser}= useContext(AuthContext)
   return (
     <div className='navbar navbar-expand-md'>
       <div className='d-flex align-items-center'>
@@ -10,11 +14,11 @@ export const Navbar = () => {
       <div className='user d-flex align-items-center'>
         <img
           className='navImg'
-          src='https://images.pexels.com/photos/16920861/pexels-photo-16920861/free-photo-of-woman-in-hat-posing-with-eyes-closed.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load'
+          src={currentUser.photoURL}
           alt=''
         />
-        <span>wp</span>
-        <button className='nav-button'>Logout</button>
+        <span>{currentUser.displayName}</span>
+        <button className='nav-button' onClick={()=>signOut(auth)}>Logout</button>
       </div>
     </div>
   );
