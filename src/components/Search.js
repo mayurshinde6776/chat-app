@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import '../css/Search.css';
-import { collection, getDocs, query, setDoc, where } from "firebase/firestore";
+import { collection, getDocs, query, serverTimestamp, setDoc, doc,getDoc, updateDoc, where } from "firebase/firestore";
 import {db} from '../firebase';
 import { AuthContext } from '../context/AuthContext';
 export const Search = () => {
@@ -41,7 +41,7 @@ currentUser.uid> user.uid
 : user.uid + currentUser.uid;
 
 try{
-  const res= await getDocs(db, "chats", combinedId);
+  const res= await getDoc(doc(db, "chats", combinedId));
 
   if(!res.exists()){
 //create a chat in chats collection
@@ -49,17 +49,28 @@ await setDoc(doc,(db, "chats", combinedId),{messages:[]})
  
 //creat user chats
 
-userChats:{
-  janrsId:{
-    combinedId:{
-      
-    }
-  }
-}
-}
-} catch(err){
+await updateDoc(doc(db,"userChats", currentUser.uid),{
+ [combinedId+".userInfo"]:{
+  uid:user.uid,
+  displayName:user.displayName,
+  photoURL:user.photoURL
+ },
+ [combinedId+".date"]: serverTimestamp()
+});
 
+await updateDoc(doc(db,"userChats", user.uid),{
+  [combinedId+".userInfo"]:{
+   uid:currentUser.uid,
+   displayName:currentUser.displayName,
+   photoURL:currentUser.photoURL
+  },
+  [combinedId+".date"]: serverTimestamp()
+ });
 }
+} catch(err){}
+
+setUser(null);
+setUsername("")
 }
 
   return (
@@ -67,7 +78,7 @@ userChats:{
    <div className='container-fluid search'>
       <div className='col'>
         <div className='searchForm'>
-          <input type='text' placeholder='find user here...' onKeyDown={handleKey} onChange={(e)=> setUsername(e.target.value)} />
+          <input type='text' placeholder='find user here...' onKeyDown={handleKey} value={username} onChange={(e)=> setUsername(e.target.value)} />
         </div>
       </div>
 
